@@ -17,10 +17,19 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    Texture2D chook = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");        // Texture loading
+    Texture2D chookR = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");        // Texture loading
+    Texture2D chookL = LoadTexture("ChickenSprite/ChickenSideWalkLeft.png");
+    Texture2D chookU = LoadTexture("ChickenSprite/ChickenWalkBack.png");
+    Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
 
-    Vector2 position = { 250.0f, 250.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, (float)chook.width / 4, (float)chook.height };
+
+
+    Vector2 position = { 100.0f, 50.0f };
+    Vector2 position1 = { 200.0f, 50.0f };
+    Vector2 position2 = { 300.0f, 50.0f };
+    Vector2 position3 = { 400.0f, 50.0f };
+
+    Rectangle frameRec = { 0.0f, 0.0f, (float)chookU.width / 4, (float)chookU.height };
     int currentFrame = 0;
 
     int framesCounter = 0;
@@ -43,7 +52,7 @@ int main(void)
 
             if (currentFrame > 5) currentFrame = 0;
 
-            frameRec.x = (float)currentFrame * (float)chook.width / 4;
+            frameRec.x = (float)currentFrame * (float)chookU.width / 4;
         }
 
         //----------------------------------------------------------------------------------
@@ -54,7 +63,10 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawTextureRec(chook, frameRec, position, WHITE);  // Draw part of the texture
+        DrawTextureRec(chookR, frameRec, position, WHITE);  // Draw part of the texture
+        DrawTextureRec(chookL, frameRec, position1, WHITE);
+        DrawTextureRec(chookU, frameRec, position2, WHITE);
+        DrawTextureRec(chookD, frameRec, position3, WHITE);
 
         //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
@@ -64,7 +76,7 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(chook);       // Texture unloading
+    UnloadTexture(chookR);       // Texture unloading
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
