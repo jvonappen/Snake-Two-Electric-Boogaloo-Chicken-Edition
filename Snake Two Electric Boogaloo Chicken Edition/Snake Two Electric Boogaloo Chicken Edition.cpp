@@ -55,7 +55,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    //Texture2D chookR = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");        // Texture loading
+    // 
     //Texture2D chookL = LoadTexture("ChickenSprite/ChickenSideWalkLeft.png");
     //Texture2D chookU = LoadTexture("ChickenSprite/ChickenWalkBack.png");
     
@@ -98,6 +98,7 @@ void InitGame(void)
     grid.y = screenHeight % SQUARE_SIZE;
 
     Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
+    Texture2D chookR = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");
     Texture2D eggSprite = LoadTexture("ChickenSprite/Egg.png");
     Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
 
@@ -116,12 +117,11 @@ void InitGame(void)
         if (i == 0)
         {
             chicken[i].texture = chookD;
-            chicken[i].colour = DARKGREEN;
         }
         else
         {
-            //chicken[i].texture = chookR;
-            chicken[i].colour = GREEN;
+            chicken[i].texture = chookR;
+            //chicken[i].colour = GREEN;
         }
     }
 
@@ -288,7 +288,7 @@ void UpdateGame(void)
 
         }
 
-        else DrawText("Press [ENTER] to play again", GetScreenWidth() / 2, GetScreenHeight() / 2, 20, GRAY);
+        else DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) /2, GetScreenHeight() / 2, 15, BLACK);
 
         /*DrawTextureRec(chookR, frameRec, position0, WHITE);
         DrawTextureRec(chookL, frameRec, position1, WHITE);
