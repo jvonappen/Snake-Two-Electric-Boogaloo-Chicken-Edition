@@ -32,7 +32,7 @@ const int screenHeight = 500;
 static int framesCounter = 0;
 static bool gameOver = false;
 
-static Food fruit = { 0 };
+static Food egg = { 0 };
 static Chicken chicken[CONGA_LINE] = { 0 };
 static Vector2 chickenPosition[CONGA_LINE] = { 0 };
 static bool canMove = false;
@@ -98,6 +98,7 @@ void InitGame(void)
     grid.y = screenHeight % SQUARE_SIZE;
 
     Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
+    Texture2D eggSprite = LoadTexture("ChickenSprite/Egg.png");
     Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
 
     framesCounter = 0;
@@ -129,10 +130,10 @@ void InitGame(void)
         chickenPosition[i] = { 0.0f, 0.0f };
     }
 
-    fruit.size = { SQUARE_SIZE, SQUARE_SIZE };
-    //fruit.texture = chookU;
-    fruit.active = false;
-    fruit.colour = PINK;
+    egg.size = { SQUARE_SIZE, SQUARE_SIZE };
+    egg.active = false;
+    egg.colour = PINK;
+    egg.texture = eggSprite;
 }
 
 
@@ -164,6 +165,7 @@ void UpdateGame(void)
         if (IsKeyPressed(KEY_RIGHT) && (chicken[0].speed.x == 0) && canMove)
         {
             chicken[0].speed = { SQUARE_SIZE, 0 };
+            //chicken[0].texture = chookR;
             canMove = false;
         }
         if (IsKeyPressed(KEY_LEFT) && (chicken[0].speed.x == 0) && canMove)
@@ -199,7 +201,7 @@ void UpdateGame(void)
             }
         }
         //----------------------------------------------------------------------------------
-          // Wall behaviour
+          // Wall
         if (((chicken[0].position.x) > (screenWidth - grid.x)) ||
             ((chicken[0].position.y) > (screenHeight - grid.y)) ||
             (chicken[0].position.x < 0) || (chicken[0].position.y < 0))
@@ -207,35 +209,35 @@ void UpdateGame(void)
             gameOver = true;
         }
 
-        // Collision with yourself
+        // Collision with other Chickens
         for (int i = 1; i < counterTail; i++)
         {
             if ((chicken[0].position.x == chicken[i].position.x) && (chicken[0].position.y == chicken[i].position.y)) gameOver = true;
         }
 
-        // Fruit position calculation
-        if (!fruit.active)
+        // Egg position calculation
+        if (!egg.active)
         {
-            fruit.active = true;
-            fruit.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
+            egg.active = true;
+            egg.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
 
             for (int i = 0; i < counterTail; i++)
             {
-                while ((fruit.position.x == chicken[i].position.x) && (fruit.position.y == chicken[i].position.y))
+                while ((egg.position.x == chicken[i].position.x) && (egg.position.y == chicken[i].position.y))
                 {
-                    fruit.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
+                    egg.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
                     i = 0;
                 }
             }
         }
 
         // Collision
-        if ((chicken[0].position.x < (fruit.position.x + fruit.size.x) && (chicken[0].position.x + chicken[0].size.x) > fruit.position.x) &&
-            (chicken[0].position.y < (fruit.position.y + fruit.size.y) && (chicken[0].position.y + chicken[0].size.y) > fruit.position.y))
+        if ((chicken[0].position.x < (egg.position.x + egg.size.x) && (chicken[0].position.x + chicken[0].size.x) > egg.position.x) &&
+            (chicken[0].position.y < (egg.position.y + egg.size.y) && (chicken[0].position.y + chicken[0].size.y) > egg.position.y))
         {
             chicken[counterTail].position = chickenPosition[counterTail - 1];  // Prevents the chicken loading in the top right
             counterTail += 1;
-            fruit.active = false;
+            egg.active = false;
         }
         framesCounter++;
     }
@@ -275,14 +277,14 @@ void UpdateGame(void)
                 DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIGHTGRAY);
             }
 
-            //Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
             Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
             // Draw chicken
             for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);
-                //DrawRectangleV(chicken[i].position, chicken[i].size, chicken[i].colour);
+            
 
-            // Draw fruit to pick
-            DrawRectangleV(fruit.position, fruit.size, fruit.colour);
+            // Draw egg to hatch
+            DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);
+           
 
         }
 
@@ -301,13 +303,11 @@ void UpdateGame(void)
         EndDrawing();
     }
 
-    // Unload game variables
     void UnloadGame(void)
     {
-        // TODO: Unload all dynamic loaded data (textures, sounds, models...)
+      
     }
 
-    // Update and Draw (one frame)
     void UpdateDrawFrame(void)
     {
         UpdateGame();
