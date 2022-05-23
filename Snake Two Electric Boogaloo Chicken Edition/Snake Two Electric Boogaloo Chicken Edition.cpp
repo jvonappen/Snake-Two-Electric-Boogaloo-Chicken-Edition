@@ -1,19 +1,32 @@
 // Snake Two Electric Boogaloo Chicken Edition.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+//("ChickenSprite/ChickenSideWalkRight.png");
 
-#include <iostream>
-#include <raylib.h>
+#include "raylib.h"
+
+#define MAX_FRAME_SPEED     15
+#define MIN_FRAME_SPEED      1
 
 int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 500;
+    const int screenHeight = 500;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
+    Texture2D chook = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");        // Texture loading
+
+    Vector2 position = { 250.0f, 250.0f };
+    Rectangle frameRec = { 0.0f, 0.0f, (float)chook.width / 4, (float)chook.height };
+    int currentFrame = 0;
+
+    int framesCounter = 0;
+    int framesSpeed = 8;            // Number of spritesheet frames shown by second
+
+    SetTargetFPS(60);               // Set game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -21,7 +34,18 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        framesCounter++;
+
+        if (framesCounter >= (60 / framesSpeed))
+        {
+            framesCounter = 0;
+            currentFrame++;
+
+            if (currentFrame > 5) currentFrame = 0;
+
+            frameRec.x = (float)currentFrame * (float)chook.width / 4;
+        }
+
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -30,7 +54,9 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        DrawTextureRec(chook, frameRec, position, WHITE);  // Draw part of the texture
+
+        //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -38,18 +64,10 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
+    UnloadTexture(chook);       // Texture unloading
+
+    CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;
 }
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

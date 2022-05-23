@@ -22,4 +22,21 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="ChickenSprite\ChickenIdle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ChickenSprite\ChickenSideWalkLeft.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ChickenSprite\ChickenSideWalkRight.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ChickenSprite\ChickenWalk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ChickenSprite\ChickenWalkBack.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
