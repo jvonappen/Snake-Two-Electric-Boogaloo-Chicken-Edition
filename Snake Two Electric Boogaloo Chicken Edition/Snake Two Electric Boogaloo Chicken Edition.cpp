@@ -6,6 +6,7 @@
 
 #define MAX_FRAME_SPEED     15
 #define MIN_FRAME_SPEED      1
+#define SQUARE_SIZE     16
 
 int main(void)
 {
@@ -13,6 +14,10 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 500;
     const int screenHeight = 500;
+
+    static Vector2 grid = { 0 };
+    grid.x = screenWidth % SQUARE_SIZE;
+    grid.y = screenHeight % SQUARE_SIZE;
 
     InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
 
@@ -57,10 +62,27 @@ int main(void)
             frameRec.x = (float)currentFrame * (float)chookU.width / 4;
         }
 
-        if (IsKeyDown(KEY_RIGHT)) position.x += 2.0f;
-        if (IsKeyDown(KEY_LEFT)) position.x -= 2.0f;
-        if (IsKeyDown(KEY_UP)) position.y -= 2.0f;
-        if (IsKeyDown(KEY_DOWN)) position.y += 2.0f;
+        if (IsKeyPressed(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_UP) && !IsKeyDown(KEY_DOWN))
+        {
+            
+            DrawTextureRec(chookR, frameRec, position, WHITE); 
+            position.x += 16.0f;
+        }
+        if (IsKeyPressed(KEY_LEFT)      && !IsKeyDown(KEY_RIGHT)&& !IsKeyDown(KEY_UP)  && !IsKeyDown(KEY_DOWN)) position.x -= 16.0f;
+        if (IsKeyPressed(KEY_UP)        && !IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_DOWN)&& !IsKeyDown(KEY_RIGHT)) position.y -= 16.0f;
+        if (IsKeyPressed(KEY_DOWN)      && !IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_UP)  && !IsKeyDown(KEY_RIGHT)) position.y += 16.0f;
+
+        // Grid
+        for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
+        {
+            DrawLineV( { SQUARE_SIZE* i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE* i + grid.x / 2, screenHeight - grid.y / 2 }, LIGHTGRAY);
+        }
+
+        for (int i = 0; i < screenHeight / SQUARE_SIZE + 1; i++)
+        {
+            DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIGHTGRAY);
+        }
+
 
         //----------------------------------------------------------------------------------
 
@@ -70,12 +92,17 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawTextureRec(chookR, frameRec, position0, WHITE);  // Draw part of the texture
+        /*DrawTextureRec(chookR, frameRec, position0, WHITE);  
         DrawTextureRec(chookL, frameRec, position1, WHITE);
         DrawTextureRec(chookU, frameRec, position2, WHITE);
-        DrawTextureRec(chookD, frameRec, position3, WHITE);
+        DrawTextureRec(chookD, frameRec, position3, WHITE);*/
 
         DrawTextureRec(chookD, frameRec, position, WHITE);
+
+        
+        
+            // Draw grid lines
+           
 
         //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
