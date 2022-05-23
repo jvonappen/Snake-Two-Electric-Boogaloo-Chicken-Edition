@@ -24,7 +24,9 @@ int main(void)
 
 
 
-    Vector2 position = { 100.0f, 50.0f };
+    Vector2 position = { 250.0f, 250.0f };
+
+    Vector2 position0 = { 100.0f, 50.0f };
     Vector2 position1 = { 200.0f, 50.0f };
     Vector2 position2 = { 300.0f, 50.0f };
     Vector2 position3 = { 400.0f, 50.0f };
@@ -55,6 +57,11 @@ int main(void)
             frameRec.x = (float)currentFrame * (float)chookU.width / 4;
         }
 
+        if (IsKeyDown(KEY_RIGHT)) position.x += 2.0f;
+        if (IsKeyDown(KEY_LEFT)) position.x -= 2.0f;
+        if (IsKeyDown(KEY_UP)) position.y -= 2.0f;
+        if (IsKeyDown(KEY_DOWN)) position.y += 2.0f;
+
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -63,10 +70,12 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawTextureRec(chookR, frameRec, position, WHITE);  // Draw part of the texture
+        DrawTextureRec(chookR, frameRec, position0, WHITE);  // Draw part of the texture
         DrawTextureRec(chookL, frameRec, position1, WHITE);
         DrawTextureRec(chookU, frameRec, position2, WHITE);
         DrawTextureRec(chookD, frameRec, position3, WHITE);
+
+        DrawTextureRec(chookD, frameRec, position, WHITE);
 
         //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
