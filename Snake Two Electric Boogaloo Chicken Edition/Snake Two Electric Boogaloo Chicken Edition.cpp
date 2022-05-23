@@ -26,6 +26,12 @@ typedef struct Food {
     Texture2D texture;
 } Food;
 
+typedef enum 
+{
+    STORAGE_POSITION_SCORE = 0,
+    //STORAGE_POSITION_HISCORE = 1
+} StorageData;
+
 const int screenWidth = 500;
 const int screenHeight = 500;
 
@@ -39,7 +45,7 @@ static bool canMove = false;
 static Vector2 grid = { 0 };
 static int counterTail = 0;
 
-
+int score = 0;
 
 static void InitGame(void);         // Initialize game
 static void UpdateGame(void);       // Update game (one frame)
@@ -73,7 +79,7 @@ int main(void)
 
    // int spriteCounter = 0;
    // int spriteSpeed = 8;            // Number of spritesheet frames shown by second
-
+    
     InitGame();
 
     SetTargetFPS(60);               // Set game to run at 60 frames-per-second
@@ -116,12 +122,13 @@ void InitGame(void)
 
         if (i == 0)
         {
-            chicken[i].texture = chookD;
+            chicken[i].texture = chookD; // Leader
         }
         else
         {
-            chicken[i].texture = chookR;
+            chicken[i].texture = chookR;  // Followers
             //chicken[i].colour = GREEN;
+            
         }
     }
 
@@ -237,6 +244,7 @@ void UpdateGame(void)
         {
             chicken[counterTail].position = chickenPosition[counterTail - 1];  // Prevents the chicken loading in the top right
             counterTail += 1;
+            score += 1;
             egg.active = false;
         }
         framesCounter++;
@@ -262,7 +270,7 @@ void UpdateGame(void)
 
         ClearBackground(RAYWHITE);
 
-
+        
     
         if (!gameOver)
         {
@@ -288,8 +296,11 @@ void UpdateGame(void)
 
         }
 
-        else DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) /2, GetScreenHeight() / 2, 15, BLACK);
-
+        else
+        {
+            DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) / 2, GetScreenHeight() / 2, 15, BLACK);
+            DrawText(TextFormat("SCORE: %i", score), GetScreenWidth() / 2 - MeasureText("SCORE: %i", 15) / 2, 80, 15, RED);
+        }
         /*DrawTextureRec(chookR, frameRec, position0, WHITE);
         DrawTextureRec(chookL, frameRec, position1, WHITE);
         DrawTextureRec(chookU, frameRec, position2, WHITE);
