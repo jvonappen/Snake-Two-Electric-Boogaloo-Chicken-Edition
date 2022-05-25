@@ -268,7 +268,7 @@ void UpdateGame(void)
             //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(DARKGREEN);
 
         
     
@@ -277,12 +277,12 @@ void UpdateGame(void)
             // Grid //----------------------------------------------------------------------------------
             for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
             {
-                DrawLineV({ SQUARE_SIZE * i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE * i + grid.x / 2, screenHeight - grid.y / 2 }, LIGHTGRAY);
+                DrawLineV({ SQUARE_SIZE * i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE * i + grid.x / 2, screenHeight - grid.y / 2 }, LIME);
             }
 
             for (int i = 0; i < screenHeight / SQUARE_SIZE + 1; i++)
             {
-                DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIGHTGRAY);
+                DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIME);
             }
 
             Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
