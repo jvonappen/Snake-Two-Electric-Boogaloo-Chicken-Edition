@@ -77,7 +77,7 @@ void InitGame(void)
 
     Texture2D chookSprite = LoadTexture("ChickenSprite/ChickenWalk.png");
     Texture2D eggSprite = LoadTexture("ChickenSprite/Egg.png");
-    Texture2D foxSprite = LoadTexture("ChickenSprite/Fox Sprite Sheet.png");
+    Texture2D foxSprite = LoadTexture("ChickenSprite/Fox2.png");
 
     framesCounter = 0;
     gameOver = false;

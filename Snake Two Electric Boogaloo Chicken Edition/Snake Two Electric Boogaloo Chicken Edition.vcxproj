@@ -151,7 +151,7 @@
     <Image Include="ChickenSprite\ChickenWalk.png" />
     <Image Include="ChickenSprite\ChickenWalkBack.png" />
     <Image Include="ChickenSprite\Egg.png" />
-    <Image Include="ChickenSprite\Fox.png" />
+    <Image Include="ChickenSprite\Fox2.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
