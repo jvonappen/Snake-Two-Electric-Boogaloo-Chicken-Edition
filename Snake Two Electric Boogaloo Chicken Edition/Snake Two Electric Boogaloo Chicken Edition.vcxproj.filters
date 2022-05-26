@@ -41,5 +41,8 @@
     <Image Include="ChickenSprite\Egg.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="ChickenSprite\Fox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

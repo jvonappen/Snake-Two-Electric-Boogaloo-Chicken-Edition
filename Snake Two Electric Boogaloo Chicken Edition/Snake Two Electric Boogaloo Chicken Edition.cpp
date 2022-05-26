@@ -75,8 +75,9 @@ void InitGame(void)
     grid.x = screenWidth % SQUARE_SIZE;
     grid.y = screenHeight % SQUARE_SIZE;
 
-    Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
+    Texture2D chookSprite = LoadTexture("ChickenSprite/ChickenWalk.png");
     Texture2D eggSprite = LoadTexture("ChickenSprite/Egg.png");
+    Texture2D foxSprite = LoadTexture("ChickenSprite/Fox Sprite Sheet.png");
 
     framesCounter = 0;
     gameOver = false;
@@ -92,11 +93,11 @@ void InitGame(void)
 
         if (i == 0)
         {
-            chicken[i].texture = chookD;                         /* Leader (aka snake head) */
+            chicken[i].texture = chookSprite;                         /* Leader (aka snake head) */
         }
         else
         {
-            chicken[i].texture = chookD;                         /* Followers (aka snake body) */
+            chicken[i].texture = chookSprite;                         /* Followers (aka snake body) */
         }                                                        /* Originally planned to use an alternate sprite */
     }
 
