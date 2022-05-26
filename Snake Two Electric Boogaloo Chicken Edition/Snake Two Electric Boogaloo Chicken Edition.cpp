@@ -11,10 +11,17 @@ typedef struct Chicken
     Vector2 size;
     Vector2 speed;
     Texture2D texture;
-    Color colour;
 };
 
 typedef struct Food 
+{
+    Vector2 position;
+    Vector2 size;
+    bool active;
+    Texture2D texture;
+};
+
+typedef struct Enemy
 {
     Vector2 position;
     Vector2 size;
@@ -30,6 +37,7 @@ static bool gameOver = false;
 
 static bool gridToggle;
 
+static Enemy fox = { 0 };
 static Food egg = { 0 };
 static Chicken chicken[CONGA_LINE] = { 0 };
 static Vector2 chickenPosition[CONGA_LINE] = { 0 };
@@ -87,6 +95,7 @@ void InitGame(void)
 
     for (int i = 0; i < CONGA_LINE; i++)
     {
+ 
         chicken[i].position = { grid.x / 2, grid.y / 2 };
         chicken[i].size = { SQUARE_SIZE, SQUARE_SIZE };
         chicken[i].speed = { SQUARE_SIZE, 0 };
@@ -98,7 +107,7 @@ void InitGame(void)
         else
         {
             chicken[i].texture = chookSprite;                         /* Followers (aka snake body) */
-        }                                                        /* Originally planned to use an alternate sprite */
+        }                                                             /* Originally planned to use an alternate sprite */
     }
 
     for (int i = 0; i < CONGA_LINE; i++)
@@ -109,9 +118,11 @@ void InitGame(void)
     egg.size = { SQUARE_SIZE, SQUARE_SIZE };
     egg.active = false;
     egg.texture = eggSprite;
+
+    fox.size = { SQUARE_SIZE, SQUARE_SIZE };
+    fox.active = false;
+    fox.texture = foxSprite;
 }
-
-
 
 void UpdateGame(void)
 {
@@ -195,7 +206,22 @@ void UpdateGame(void)
             score += 1;
             hiScore += 1;
             egg.active = false;
+            fox.active = false;                                                         /* Changes fox position every time an egg is hatched */
         }
+    // Fox position calculation //-----------------------------------------------------------------------------------------------------
+        if (!fox.active)
+        {
+            extraFox = !extraFox;
+            fox.active = true; 
+            fox.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
+        }
+    // Collision with Fox //------------------------------------------------------------------------------------------------------------
+        if ((chicken[0].position.x < (fox.position.x + fox.size.x) && (chicken[0].position.x + chicken[0].size.x) > fox.position.x) &&
+            (chicken[0].position.y < (fox.position.y + fox.size.y) && (chicken[0].position.y + chicken[0].size.y) > fox.position.y))
+        {
+            gameOver = true;
+        }
+        
         framesCounter++;                                                                /* Creates the "tick" style movement */
     }
     // Restart at Game Over //------------------------------------------------------------------------------------------------------------
@@ -239,6 +265,9 @@ void UpdateGame(void)
             for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);        /* Draws chicken */
        
             DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);                                                          /* Draws egg to hatch */
+            
+            DrawTextureRec(fox.texture, frameRec1, fox.position, RAYWHITE);                                                          /* Draws fox */
+           
             DrawText("Controls", 10, 10, 12, GREEN);
             DrawText("Move: W . A . S . D", 10, 22, 10, GREEN);
             DrawText("Toggle Grid: T", 10, 32, 10, GREEN);
