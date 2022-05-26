@@ -33,6 +33,8 @@ const int screenHeight = 500;
 static int framesCounter = 0;
 static bool gameOver = false;
 
+static bool gridToggle;
+
 static Food egg = { 0 };
 static Chicken chicken[CONGA_LINE] = { 0 };
 static Vector2 chickenPosition[CONGA_LINE] = { 0 };
@@ -141,6 +143,10 @@ void UpdateGame(void)
             chicken[0].speed = { 0, SQUARE_SIZE };
             canMove = false;
         }
+        if (IsKeyPressed(KEY_T))
+        {
+            gridToggle = !gridToggle;                                       /* Toggles the grid view */
+        }
     // Movement //---------------------------------------------------------------------------------------------------------------------
         for (int i = 0; i < counterTail; i++) chickenPosition[i] = chicken[i].position;
 
@@ -219,14 +225,17 @@ void UpdateGame(void)
         if (!gameOver)
         {
     // Grid //-----------------------------------------------------------------------------------------------------------------------
-            for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
+            if (gridToggle)
             {
-                DrawLineV({ SQUARE_SIZE * i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE * i + grid.x / 2, screenHeight - grid.y / 2 }, LIME);
-            }
+                for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
+                {
+                    DrawLineV({ SQUARE_SIZE * i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE * i + grid.x / 2, screenHeight - grid.y / 2 }, LIME);
+                }
 
-            for (int i = 0; i < screenHeight / SQUARE_SIZE + 1; i++)
-            {
-                DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIME);
+                for (int i = 0; i < screenHeight / SQUARE_SIZE + 1; i++)
+                {
+                    DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIME);
+                }
             }
     // Characters //-----------------------------------------------------------------------------------------------------------------
             Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };                                                                            /* Needed to load texture */
