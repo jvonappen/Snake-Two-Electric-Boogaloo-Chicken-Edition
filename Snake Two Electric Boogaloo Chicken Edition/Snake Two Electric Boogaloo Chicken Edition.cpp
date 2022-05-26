@@ -243,6 +243,7 @@ void UpdateGame(void)
             for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);        /* Draws chicken */
        
             DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);                                                          /* Draws egg to hatch */
+            DrawText("Controls", 20, screenHeight - 20, 10, GREEN);
         }
     // Game Over Screen //----------------------------------------------------------------------------------------------------------
         else
@@ -252,7 +253,7 @@ void UpdateGame(void)
             DrawText(TextFormat("HIGH SCORE: %i", hiScore), GetScreenWidth() / 2 - MeasureText("HIGH SCORE: %i", 15) / 2, 100, 15, GREEN);
         }
 
-        //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
+       
 
         EndDrawing();
     }
