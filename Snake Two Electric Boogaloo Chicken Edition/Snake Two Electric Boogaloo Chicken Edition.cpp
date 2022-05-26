@@ -21,12 +21,6 @@ typedef struct Food {
     Texture2D texture;
 } Food;
 
-typedef enum 
-{
-    STORAGE_POSITION_SCORE = 0,
-    STORAGE_POSITION_HIGHSCORE = 0
-} StorageData;
-
 const int screenWidth = 500;
 const int screenHeight = 500;
 
