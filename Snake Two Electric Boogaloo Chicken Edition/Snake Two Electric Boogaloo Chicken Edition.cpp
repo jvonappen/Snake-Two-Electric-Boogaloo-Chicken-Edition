@@ -22,14 +22,13 @@ typedef struct Food {
     Vector2 position;
     Vector2 size;
     bool active;
-    Color colour;
     Texture2D texture;
 } Food;
 
 typedef enum 
 {
     STORAGE_POSITION_SCORE = 0,
-    //STORAGE_POSITION_HISCORE = 1
+    STORAGE_POSITION_HIGHSCORE = 0
 } StorageData;
 
 const int screenWidth = 500;
@@ -46,12 +45,13 @@ static Vector2 grid = { 0 };
 static int counterTail = 0;
 
 int score = 0;
+int hiScore = 0;
 
-static void InitGame(void);         // Initialize game
-static void UpdateGame(void);       // Update game (one frame)
-static void DrawGame(void);         // Draw game (one frame)
-static void UnloadGame(void);       // Unload game
-static void UpdateDrawFrame(void);  // Update and Draw (one frame)
+static void InitGame(void);         
+static void UpdateGame(void);       
+static void DrawGame(void);         
+static void UnloadGame(void);       
+static void UpdateDrawFrame(void);  
 
 int main(void)
 {
@@ -59,27 +59,12 @@ int main(void)
     //--------------------------------------------------------------------------------------
     
     InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
+  
+    Texture2D chookL = LoadTexture("ChickenSprite/ChickenSideWalkLeft.png");
+    Texture2D chookU = LoadTexture("ChickenSprite/ChickenWalkBack.png");
 
-    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    // 
-    //Texture2D chookL = LoadTexture("ChickenSprite/ChickenSideWalkLeft.png");
-    //Texture2D chookU = LoadTexture("ChickenSprite/ChickenWalkBack.png");
-    
+    int currentFrame = 0;
 
-    //Vector2 position = { 250.0f, 250.0f };
-
-  /*  Vector2 position0 = { 100.0f, 50.0f };
-    Vector2 position1 = { 200.0f, 50.0f };
-    Vector2 position2 = { 300.0f, 50.0f };
-    Vector2 position3 = { 400.0f, 50.0f };*/
-
-    //Rectangle frameRec1 = { 0.0f, 0.0f, (float)chookU.width / 4, (float)chookU.height };
-    
-    //int currentFrame = 0;
-
-   // int spriteCounter = 0;
-   // int spriteSpeed = 8;            // Number of spritesheet frames shown by second
-    
     InitGame();
 
     SetTargetFPS(60);               // Set game to run at 60 frames-per-second
@@ -93,7 +78,7 @@ int main(void)
 
     // De-Initialization
   //--------------------------------------------------------------------------------------
-  //UnloadTexture(chookR);       // Texture unloading
+
     UnloadGame();
     CloseWindow();
     return 0;
@@ -127,8 +112,6 @@ void InitGame(void)
         else
         {
             chicken[i].texture = chookR;  // Followers
-            //chicken[i].colour = GREEN;
-            
         }
     }
 
@@ -139,7 +122,6 @@ void InitGame(void)
 
     egg.size = { SQUARE_SIZE, SQUARE_SIZE };
     egg.active = false;
-    egg.colour = PINK;
     egg.texture = eggSprite;
 }
 
@@ -150,42 +132,24 @@ void UpdateGame(void)
     if (!gameOver)
     {
 
-        // Update
-        //----------------------------------------------------------------------------------
-
-
-        // Sprite animation  //----------------------------------------------------------------------------------
-    /*    spriteCounter++;
-
-        if (spriteCounter >= (60 / spriteSpeed))
-        {
-            spriteCounter = 0;
-            currentFrame++;
-
-            if (currentFrame > 5) currentFrame = 0;
-
-            frameRec.x = (float)currentFrame * (float)chookU.width / 4;
-        }*/
-
-
         // Controls //----------------------------------------------------------------------------------
-        if (IsKeyPressed(KEY_RIGHT) && (chicken[0].speed.x == 0) && canMove)
+        if (IsKeyPressed(KEY_D) && (chicken[0].speed.x == 0) && canMove)
         {
             chicken[0].speed = { SQUARE_SIZE, 0 };
             //chicken[0].texture = chookR;
             canMove = false;
         }
-        if (IsKeyPressed(KEY_LEFT) && (chicken[0].speed.x == 0) && canMove)
+        if (IsKeyPressed(KEY_A) && (chicken[0].speed.x == 0) && canMove)
         {
             chicken[0].speed = { -SQUARE_SIZE, 0 };
             canMove = false;
         }
-        if (IsKeyPressed(KEY_UP) && (chicken[0].speed.y == 0) && canMove)
+        if (IsKeyPressed(KEY_W) && (chicken[0].speed.y == 0) && canMove)
         {
             chicken[0].speed = { 0, -SQUARE_SIZE };
             canMove = false;
         }
-        if (IsKeyPressed(KEY_DOWN) && (chicken[0].speed.y == 0) && canMove)
+        if (IsKeyPressed(KEY_S) && (chicken[0].speed.y == 0) && canMove)
         {
             chicken[0].speed = { 0, SQUARE_SIZE };
             canMove = false;
@@ -245,6 +209,7 @@ void UpdateGame(void)
             chicken[counterTail].position = chickenPosition[counterTail - 1];  // Prevents the chicken loading in the top right
             counterTail += 1;
             score += 1;
+            hiScore += 1;
             egg.active = false;
         }
         framesCounter++;
@@ -255,23 +220,19 @@ void UpdateGame(void)
         {
             InitGame();
             gameOver = false;
+            score = 0;
         }
     }
 }
 
 
-
-
     void DrawGame(void)
     {
-        // Draw
-            //----------------------------------------------------------------------------------
+        // Draw //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(DARKGREEN);
 
-        
-    
         if (!gameOver)
         {
             // Grid //----------------------------------------------------------------------------------
@@ -298,16 +259,10 @@ void UpdateGame(void)
 
         else
         {
-            DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) / 2, GetScreenHeight() / 2, 15, BLACK);
-            DrawText(TextFormat("SCORE: %i", score), GetScreenWidth() / 2 - MeasureText("SCORE: %i", 15) / 2, 80, 15, RED);
+            DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) / 2, GetScreenHeight() / 2, 15, GREEN);
+            DrawText(TextFormat("SCORE: %i", score), GetScreenWidth() / 2 - MeasureText("SCORE: %i", 15) / 2, 80, 15, GREEN);
+            DrawText(TextFormat("HIGH SCORE: %i", hiScore), GetScreenWidth() / 2 - MeasureText("HIGH SCORE: %i", 15) / 2, 100, 15, GREEN);
         }
-        /*DrawTextureRec(chookR, frameRec, position0, WHITE);
-        DrawTextureRec(chookL, frameRec, position1, WHITE);
-        DrawTextureRec(chookU, frameRec, position2, WHITE);
-        DrawTextureRec(chookD, frameRec, position3, WHITE);*/
-
-
-        //DrawTextureRec(chookD, frameRec, position, WHITE);
 
         //DrawText("Controls", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
@@ -324,6 +279,5 @@ void UpdateGame(void)
         UpdateGame();
         DrawGame();
     }
-            
-        //----------------------------------------------------------------------------------
+
 
