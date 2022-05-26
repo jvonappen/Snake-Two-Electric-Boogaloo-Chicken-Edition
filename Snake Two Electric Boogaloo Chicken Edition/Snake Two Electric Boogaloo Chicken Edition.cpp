@@ -211,7 +211,6 @@ void UpdateGame(void)
     // Fox position calculation //-----------------------------------------------------------------------------------------------------
         if (!fox.active)
         {
-            extraFox = !extraFox;
             fox.active = true; 
             fox.position = { GetRandomValue(0, (screenWidth / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.x / 2, GetRandomValue(0, (screenHeight / SQUARE_SIZE) - 1) * SQUARE_SIZE + grid.y / 2 };
         }
