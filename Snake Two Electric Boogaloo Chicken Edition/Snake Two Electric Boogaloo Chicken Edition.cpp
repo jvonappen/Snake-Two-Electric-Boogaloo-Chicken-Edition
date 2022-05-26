@@ -5,21 +5,22 @@
 #define SQUARE_SIZE         16
 #define CONGA_LINE          256
 
-typedef struct Chicken 
+typedef struct Chicken
 {
     Vector2 position;
     Vector2 size;
     Vector2 speed;
     Texture2D texture;
     Color colour;
-} Chicken;
+};
 
-typedef struct Food {
+typedef struct Food 
+{
     Vector2 position;
     Vector2 size;
     bool active;
     Texture2D texture;
-} Food;
+};
 
 const int screenWidth = 500;
 const int screenHeight = 500;
@@ -59,7 +60,7 @@ int main(void)
     SetTargetFPS(60);
 
  // Main game loop  //--------------------------------------------------------------------------------------
-    while (!WindowShouldClose())                                                                         /* Detect window close button or ESC key */ 
+    while (!WindowShouldClose())                                  /* Detect window close button or ESC key */ 
     {
         UpdateDrawFrame();
     }
@@ -144,7 +145,7 @@ void UpdateGame(void)
     // Movement //---------------------------------------------------------------------------------------------------------------------
         for (int i = 0; i < counterTail; i++) chickenPosition[i] = chicken[i].position;
 
-        if ((framesCounter % 5) == 0)
+        if ((framesCounter % 5) == 0)                                       /* Sets the speed of the 'tick' style movement */
         {
             for (int i = 0; i < counterTail; i++)
             {
@@ -237,7 +238,9 @@ void UpdateGame(void)
             for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);        /* Draws chicken */
        
             DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);                                                          /* Draws egg to hatch */
-            DrawText("Controls", 20, screenHeight - 20, 10, GREEN);
+            DrawText("Controls", 10, 10, 12, GREEN);
+            DrawText("Move: W . A . S . D", 10, 22, 10, GREEN);
+            DrawText("Toggle Grid: T", 10, 32, 10, GREEN);
         }
     // Game Over Screen //----------------------------------------------------------------------------------------------------------
         else
@@ -246,8 +249,6 @@ void UpdateGame(void)
             DrawText(TextFormat("SCORE: %i", score), GetScreenWidth() / 2 - MeasureText("SCORE: %i", 15) / 2, 80, 15, GREEN);
             DrawText(TextFormat("HIGH SCORE: %i", hiScore), GetScreenWidth() / 2 - MeasureText("HIGH SCORE: %i", 15) / 2, 100, 15, GREEN);
         }
-
-       
 
         EndDrawing();
     }
