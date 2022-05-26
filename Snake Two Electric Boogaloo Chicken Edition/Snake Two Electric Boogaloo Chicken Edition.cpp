@@ -1,11 +1,7 @@
 // Snake Two Electric Boogaloo Chicken Edition.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-//("ChickenSprite/ChickenSideWalkRight.png");
 
 #include "raylib.h"
 
-//#define MAX_FRAME_SPEED     15
-//#define MIN_FRAME_SPEED     1
 #define SQUARE_SIZE         16
 #define CONGA_LINE          256
 
@@ -55,29 +51,23 @@ static void UpdateDrawFrame(void);
 
 int main(void)
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
+ // Initialization //----------------------------------------------------------------------------------------
+  
     
     InitWindow(screenWidth, screenHeight, "Snake 2: Electric Boogaloo *Chicken Edition*");
-  
-    Texture2D chookL = LoadTexture("ChickenSprite/ChickenSideWalkLeft.png");
-    Texture2D chookU = LoadTexture("ChickenSprite/ChickenWalkBack.png");
 
     int currentFrame = 0;
 
     InitGame();
 
-    SetTargetFPS(60);               // Set game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
+    SetTargetFPS(60);
 
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+ // Main game loop  //--------------------------------------------------------------------------------------
+    while (!WindowShouldClose())                                                                         /* Detect window close button or ESC key */ 
     {
         UpdateDrawFrame();
     }
-
-    // De-Initialization
-  //--------------------------------------------------------------------------------------
+ // De-Initialization //------------------------------------------------------------------------------------
 
     UnloadGame();
     CloseWindow();
@@ -89,9 +79,7 @@ void InitGame(void)
     grid.y = screenHeight % SQUARE_SIZE;
 
     Texture2D chookD = LoadTexture("ChickenSprite/ChickenWalk.png");
-    Texture2D chookR = LoadTexture("ChickenSprite/ChickenSideWalkRight.png");
     Texture2D eggSprite = LoadTexture("ChickenSprite/Egg.png");
-    Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
 
     framesCounter = 0;
     gameOver = false;
@@ -107,12 +95,12 @@ void InitGame(void)
 
         if (i == 0)
         {
-            chicken[i].texture = chookD; // Leader
+            chicken[i].texture = chookD;                         /* Leader (aka snake head) */
         }
         else
         {
-            chicken[i].texture = chookR;  // Followers
-        }
+            chicken[i].texture = chookD;                         /* Followers (aka snake body) */
+        }                                                        /* Originally planned to use an alternate sprite */
     }
 
     for (int i = 0; i < CONGA_LINE; i++)
@@ -132,11 +120,10 @@ void UpdateGame(void)
     if (!gameOver)
     {
 
-        // Controls //----------------------------------------------------------------------------------
+    // Controls //----------------------------------------------------------------------------------------------------------------------
         if (IsKeyPressed(KEY_D) && (chicken[0].speed.x == 0) && canMove)
         {
             chicken[0].speed = { SQUARE_SIZE, 0 };
-            //chicken[0].texture = chookR;
             canMove = false;
         }
         if (IsKeyPressed(KEY_A) && (chicken[0].speed.x == 0) && canMove)
@@ -154,8 +141,7 @@ void UpdateGame(void)
             chicken[0].speed = { 0, SQUARE_SIZE };
             canMove = false;
         }
-
-        // Movement //----------------------------------------------------------------------------------
+    // Movement //---------------------------------------------------------------------------------------------------------------------
         for (int i = 0; i < counterTail; i++) chickenPosition[i] = chicken[i].position;
 
         if ((framesCounter % 5) == 0)
@@ -170,23 +156,20 @@ void UpdateGame(void)
                 }
                 else chicken[i].position = chickenPosition[i - 1];
             }
-        }
-        //----------------------------------------------------------------------------------
-          // Wall
+        } 
+    // Wall  //-----------------------------------------------------------------------------------------------------------------------
         if (((chicken[0].position.x) > (screenWidth - grid.x)) ||
             ((chicken[0].position.y) > (screenHeight - grid.y)) ||
             (chicken[0].position.x < 0) || (chicken[0].position.y < 0))
         {
             gameOver = true;
         }
-
-        // Collision with other Chickens
+    // Collision with other Chickens //-----------------------------------------------------------------------------------------------
         for (int i = 1; i < counterTail; i++)
         {
             if ((chicken[0].position.x == chicken[i].position.x) && (chicken[0].position.y == chicken[i].position.y)) gameOver = true;
         }
-
-        // Egg position calculation
+    // Egg position calculation //-----------------------------------------------------------------------------------------------------
         if (!egg.active)
         {
             egg.active = true;
@@ -201,26 +184,26 @@ void UpdateGame(void)
                 }
             }
         }
-
-        // Collision
+    // Collision with Egg //------------------------------------------------------------------------------------------------------------
         if ((chicken[0].position.x < (egg.position.x + egg.size.x) && (chicken[0].position.x + chicken[0].size.x) > egg.position.x) &&
             (chicken[0].position.y < (egg.position.y + egg.size.y) && (chicken[0].position.y + chicken[0].size.y) > egg.position.y))
         {
-            chicken[counterTail].position = chickenPosition[counterTail - 1];  // Prevents the chicken loading in the top right
+            chicken[counterTail].position = chickenPosition[counterTail - 1];           /* Prevents the chicken loading in the top right */ 
             counterTail += 1;
             score += 1;
             hiScore += 1;
             egg.active = false;
         }
-        framesCounter++;
+        framesCounter++;                                                                /* Creates the "tick" style movement */
     }
+    // Restart at Game Over //------------------------------------------------------------------------------------------------------------
     else
     {
         if (IsKeyPressed(KEY_ENTER))
         {
             InitGame();
             gameOver = false;
-            score = 0;
+            score = 0;                                                                 /* Resets game score */
         }
     }
 }
@@ -228,14 +211,14 @@ void UpdateGame(void)
 
     void DrawGame(void)
     {
-        // Draw //----------------------------------------------------------------------------------
+    // Draw //-----------------------------------------------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(DARKGREEN);
 
         if (!gameOver)
         {
-            // Grid //----------------------------------------------------------------------------------
+    // Grid //-----------------------------------------------------------------------------------------------------------------------
             for (int i = 0; i < screenWidth / SQUARE_SIZE + 1; i++)
             {
                 DrawLineV({ SQUARE_SIZE * i + grid.x / 2, grid.y / 2 }, { SQUARE_SIZE * i + grid.x / 2, screenHeight - grid.y / 2 }, LIME);
@@ -245,18 +228,14 @@ void UpdateGame(void)
             {
                 DrawLineV({ grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, { screenWidth - grid.x / 2, SQUARE_SIZE * i + grid.y / 2 }, LIME);
             }
-
-            Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };
-            // Draw chicken
-            for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);
-            
-
-            // Draw egg to hatch
-            DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);
+    // Characters //-----------------------------------------------------------------------------------------------------------------
+            Rectangle frameRec1 = { 0.0f, 0.0f, 16, 16 };                                                                            /* Needed to load texture */
            
-
+            for (int i = 0; i < counterTail; i++) DrawTextureRec(chicken->texture, frameRec1, chicken[i].position, RAYWHITE);        /* Draws chicken */
+       
+            DrawTextureRec(egg.texture, frameRec1, egg.position, RAYWHITE);                                                          /* Draws egg to hatch */
         }
-
+    // Game Over Screen //----------------------------------------------------------------------------------------------------------
         else
         {
             DrawText("Press [ENTER] to play again!", GetScreenWidth() / 2 - MeasureText("Press [ENTER] to play again!", 15) / 2, GetScreenHeight() / 2, 15, GREEN);
